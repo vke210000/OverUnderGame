@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVER UNDER DOUBLE SAME Game</title>
+    <style>
+        body {
+            font-family: Serif, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin-top: 30px;
+            position: relative; /* Allows absolute positioning for child elements */
+        }
+
+	.dice-icon {
+            position: absolute;
+            font-size: 100px; 
+            color: #8A2BE2;
+            z-index: 10;
+        }
+
+        /* Position dice icons at the corners */
+        .dice-icon.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .dice-icon.top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .dice-icon.bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .dice-icon.bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* Make sure the dice have content */
+        .dice-icon.top-left::before {
+            content: "⚀";
+        }
+
+        .dice-icon.top-right::before {
+            content: "⚁";
+        }
+
+        .dice-icon.bottom-left::before {
+            content: "⚂";
+        }
+
+        .dice-icon.bottom-right::before {
+            content: "⚃";
+        }
+	#points {
+ 	   font-size: 2em;  /* Makes the points text larger */
+  	  font-weight: bold;  /* Makes the points bold */
+    	color: #8a2be2;  /* Matches the theme color */
+   	 text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adds shadow for emphasis */
+	}
+	.game-info p strong {
+    	font-size: 2em; /* Increases font size */
+    	font-weight: bold; /* Makes the text bold */
+    	color: #8a2be2; /* Matches the theme color */
+    	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Adds a shadow for emphasis */
+	}
+        .game-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            margin-top: 100px; /* Adjust to avoid overlap with dice icons */
+        }
+<div id="result-container">
+    <div id="result"></div>
+</div>
+
+        h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 30px;
+        }
+
+        .dice {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            font-size: 80px;
+            background-color: #8a2be2;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dice:hover {
+            transform: rotate(10deg);
+        }
+
+        button {
+            padding: 10px 20px; /* Increases padding */
+    font-size: 20px;    /* Increases text size */
+    width: 200px;       /* Makes the button wider */
+    cursor: pointer;
+    background-color: #8a2be2;
+    color: #fff;
+    border: none;
+    border-radius: 8px; /* Adds rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhances button shadow */
+    transition: background-color 0.3s, transform 0.2s;
+    margin-bottom: 20px;
+        }
+
+        button:hover {
+             background-color: #45a049; /* Changes color on hover */
+    transform: scale(1.1);     /* Slightly enlarges on hover */
+    margin-bottom: 15px;
+        }
+
+        .score-container {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically (optional, for multi-line items) */
+    font-size: 20px; /* Adjust font size for visibility */
+    font-weight: bold; /* Make text bold */
+    margin: 10px 0; /* Add spacing above and below */
+    text-align: center; /* Center-align text inside the container */
+
+#result-container {
+    margin-top: 20px;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+#result {
+    display: inline-block;
+    padding: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: all 0.5s ease;
+}
+
+.result-win {
+    color: white;
+    background-color: green;
+    box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.6);
+    animation: winEffect 1s ease infinite;
+}
+
+.result-lose {
+    color: white;
+    background-color: red;
+    box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.6);
+    animation: shake 0.5s ease;
+}
+
+@keyframes winEffect {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+}
+
+        /* Dice Roll 2 Styling */
+        #diceRoll2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; /* Increased gap between dice */
+        }
+
+        #diceRoll2 .dice {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            font-size: 80px;
+            background-color: #8a2be2;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+.betting-section {
+    font-size: 1.5em; /* Increases the font size for all children */
+    margin: 20px auto; /* Centers the section */
+    text-align: center; /* Aligns all content centrally */
+    padding: 20px; /* Adds spacing around the section */
+    background-color: #f8f9fa; /* Light background for contrast */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Adds a shadow */
+}
+
+/* Enlarge the score */
+.score-container {
+ 	margin-top: 10px;
+    font-size: 1.3em; /* Enlarges the score text */
+    font-weight: bold; /* Makes it more prominent */
+    color: #8a2be2; /* Matches theme color */
+    margin-bottom: 10px; /* Adds spacing below the score */
+}
+
+/* Enlarge the bet options (Over/Under) */
+.bet-container {
+   display: flex; /* Align items in a row */
+    gap: 25px; /* Add space between elements */
+    justify-content: center; /* Center align the buttons */
+    margin-top: 10px;
+}
+
+/* Enlarge the wager label and input */
+.wager-container {
+	margin-top: 10px;
+    font-size: 1.1em; /* Increases size of text */
+    margin-bottom: 10px; /* Adds spacing below the wager input */
+}
+
+.wager-container label {
+    font-weight: bold; /* Makes the label bold */
+    margin-right: 10px; /* Adds spacing between label and input */
+}
+.wager-label {
+    font-size: 24px; /* Increases font size */
+    font-weight: bold; /* Makes text bold */
+    color: #8a2be2; /* Matches the theme color */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Adds a shadow for depth */
+    display: block; /* Ensures it appears above the input */
+    margin-bottom: 10px; /* Adds spacing below the label */
+}
+img {
+	border-radius: 20px;
+	width:150px;
+	height:150px;
+}
+
+/* Style the wager input */
+.wager-input {
+    width: 120px; /* Makes input wider */
+    padding: 10px; /* Adds padding inside the input */
+    font-size: 18px; /* Increases input text size */
+    border: 2px solid #8a2be2; /* Matches border with theme color */
+    border-radius: 8px; /* Adds rounded corners */
+    text-align: center; /* Centers the text */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
+    transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effects */
+}
+
+/* Add hover effect to the input field */
+.wager-input:hover {
+    transform: scale(1.05); /* Slightly enlarges on hover */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
+}
+    </style>
+</head>
+<body>
+<img src= https://cdn.pixabay.com/animation/2022/11/09/13/33/13-33-02-34_512.gif alt = "spinning die" >
+    <div class="dice-icon top-left"></div>
+    <div class="dice-icon top-right"></div>
+    <div class="dice-icon bottom-left"></div>
+    <div class="dice-icon bottom-right"></div>
+
+
+    <div class="container">
+        <h1>OVER UNDER DOUBLE SAME GAME</h1>
+        <div class="game-info">
+            <p><strong>Welcome to 3312 Game of OVER UNDER DOUBLE SAME</strong></p>
+            <p>The game is played by rolling 2 dice twice. Every player begins the game with 20 points.</p>
+            <p> The object of the game is to accumulate more points. If your point balance falls to</p>
+            <p> zero or less, the game automatically ends.</p>
+            <p></p>
+            <p><strong>******* Game Instructions and Rules *******</strong></p>
+            <p>When the first roll occurs, the Roll_1 dice values and sum are set. After Roll_1, the player decides if the</p>
+            <p> Roll_2 sum is likely to be over or under the Roll_1 sum. The player makes a wager based on their decision of over or under.</p>
+            <p> Wagers can be from 0 to 10 points. If the player bets OVER or UNDER correctly, the player wins the amount of the wager,</p>
+            <p> and that value is added to their point total. If the player bets OVER or UNDER incorrectly, the player loses points</p>
+            <p>in the amount of the wager, and that value is subtracted from the player's point total. </p>
+            <p><strong>*** Special Cases ***</strong></p>
+            <p>If Roll_2 yields a double (e.g., 2,2 or 5,5), OR Roll_2 sum is the same as the Roll_1 sum, the round is lost and the amount of the</p>
+            <p>wager is subtracted from the player's point total. Note that the round is lost irrespective of the outcome of the over/under bet.</p>
+            <p>And that's the name of the game - OVER UNDER DOUBLE SAME!</p>
+        </div>
+        <div class="game-info">
+    <p><strong>Initial Points: </strong><span id="points">20</span></p>
+</div>
+<!-- Dice and Game Elements -->
+<div class="game-info">
+    <button class="button" onclick="rollDice1()">Roll Dice 1</button>
+</div>
+<div id="diceRoll1" class="dice-container">
+    <div class="dice" id="dice1">🎲</div>
+    <div class="dice" id="dice2">🎲</div>
+</div>
+<div class="betting-section">
+    <div class="score-container">
+        <span>Current Score: </span><span id="score">20</span>
+    </div>
+    <div class="bet-container">
+        <input type="radio" id="over" name="bet" value="O">
+        <label for="over">Over</label>
+        <input type="radio" id="under" name="bet" value="U">
+        <label for="under">Under</label>
+    </div>
+    <div class="wager-container">
+        <label for="wager">Wager (1-10 points):</label>
+        <input type="number" id="wager" class="wager-input" min="1" max="10">
+    </div>
+</div>
+<button class="button" onclick="storeBetAndWager()">Submit Bet and Wager</button>
+<div id="diceRoll2"></div>
+<div id="result"></div>
+    </div>
+    <script>
+        let initialPoints = 20; // Keeps the starting points constant
+let currentScore = initialPoints; // Tracks the score changes during the game
+let roll1Sum = 0;
+let roll2Sum = 0;
+let bet = '';
+let wager = 0;
+
+function getDiceIcon(value) {
+    const diceIcons = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+    return diceIcons[value - 1];
+}
+
+function rollDice1() {
+    // Roll two dice for Roll 1
+    let dice1 = Math.floor(Math.random() * 6) + 1;
+    let dice2 = Math.floor(Math.random() * 6) + 1;
+    roll1Sum = dice1 + dice2;
+    const diceRoll1Container = document.getElementById('diceRoll1');
+    diceRoll1Container.innerHTML = `
+        Roll 1: <div class="dice">${getDiceIcon(dice1)}</div>, 
+        <div class="dice">${getDiceIcon(dice2)}</div> 
+        (Sum: ${roll1Sum})`;
+}
+
+function storeBetAndWager() {
+    // Get bet and wager values
+    bet = document.querySelector('input[name="bet"]:checked')?.value;
+    wager = parseInt(document.getElementById('wager').value);
+
+    // Validation
+    if (!bet) {
+        alert("Please select a bet (Over or Under).");
+        return;
+    }
+
+    if (isNaN(wager) || wager < 1 || wager > 10) {
+        alert("Please enter a valid wager between 1 and 10.");
+        return;
+    }
+
+    if (wager > currentScore) {
+        alert("You don't have enough points!");
+        return;
+    }
+
+    rollDice2();
+}
+
+function rollDice2() {
+    // Roll two dice for Roll 2
+    let dice1 = Math.floor(Math.random() * 6) + 1;
+    let dice2 = Math.floor(Math.random() * 6) + 1;
+    roll2Sum = dice1 + dice2;
+    const diceRoll2Container = document.getElementById('diceRoll2');
+    diceRoll2Container.innerHTML = `
+        Roll 2: <div class="dice">${getDiceIcon(dice1)}</div>, 
+        <div class="dice">${getDiceIcon(dice2)}</div> 
+        (Sum: ${roll2Sum})`;
+    updateScore();
+}
+
+function updateScore() {
+    const resultContainer = document.getElementById('result');
+    resultContainer.className = ''; // Reset classes
+
+    if (roll2Sum === roll1Sum) {
+        currentScore -= wager;
+        resultContainer.textContent = `💔 Round Lost! Same Sum! You lost ${wager} points!`;
+        resultContainer.classList.add('result-lose');
+    } else if (bet === 'O' && roll2Sum > roll1Sum) {
+        currentScore += wager;
+        resultContainer.textContent = `🎉 You win! Roll 2 is OVER. You gained ${wager} points!`;
+        resultContainer.classList.add('result-win');
+    } else if (bet === 'U' && roll2Sum < roll1Sum) {
+        currentScore += wager;
+        resultContainer.textContent = `🎉 You win! Roll 2 is UNDER. You gained ${wager} points!`;
+        resultContainer.classList.add('result-win');
+    } else {
+        currentScore -= wager;
+        resultContainer.textContent = `💔 You lose! Incorrect bet. You lost ${wager} points!`;
+        resultContainer.classList.add('result-lose');
+    }
+
+    
+    document.getElementById('score').textContent = currentScore;
+
+    if (currentScore <= 0) {
+        alert("Game Over! You've run out of points.");
+        resetGame();
+    }
+}
+
+function resetGame() {
+    currentScore = initialPoints; // Reset to the initial points
+    roll1Sum = 0;
+    roll2Sum = 0;
+    bet = '';
+    wager = 0;
+
+    document.getElementById('points').textContent = currentScore;
+    document.getElementById('score').textContent = currentScore;
+    document.getElementById('diceRoll1').innerHTML = '';
+    document.getElementById('diceRoll2').innerHTML = '';
+    document.getElementById('result').textContent = '';
+}
+    </script>
+</body>
+</html>
